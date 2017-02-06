@@ -1,0 +1,201 @@
+swagger: '2.0'
+info:
+  title: Mocknidhi API
+  description: Mocknidhi provides custom endpoints to test HTTP requests and responses.
+  version: 1.0.0
+host: mocknidhi.com
+schemes:
+  - https
+  - http
+basePath: /api/v1
+produces:
+  - application/json
+  - application/xml
+consumes:
+  - application/json
+  - application/xml
+paths:
+  /mock:
+    get:
+      summary: Get All Mock endpoints
+      operationId: getAllMockEndpoints
+      description: |
+        The mock endpoint returns all the list of configured mocks endpoint details.
+      parameters:
+        - name: offset
+          in: query
+          type: integer
+          format: int32
+          description: Offset the list of returned results by this amount. Default is zero.
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          description: Number of items to retrieve. Default is 5, maximum is 100.
+      tags:
+        - Mocks
+      responses:
+        '200':
+          description: An array of Mock endpoints
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Mock'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+          summary: Create a Mock endpoint
+          operationId: createMockEndpoint
+          description: |
+            The Mock endpoint creates a mock endpoint in mocknidhi.
+          parameters:
+            - name: mock
+              in: body
+              description: Mock endpoint to add
+              required: true
+              schema:
+                $ref: '#/definitions/Mock'
+          tags:
+            - Mocks
+          responses:
+            '201':
+              description: A mocknidhi Mock endpoint
+              schema:
+                $ref: '#/definitions/Mock'
+            '500':
+              description: Unexpected error
+              schema:
+                $ref: '#/definitions/Error'
+  /mock/{mockId}:
+    put:
+      summary: Update a Mock endpoint
+      operationId: updateMockEndpoint
+      description: |
+        The Mock endpoint updates a mock endpoint in mocknidhi.
+      parameters:
+        - name: mockId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Mock endpoint identifier
+        - name: mock
+          in: body
+          description: Mock endpoint to update
+          required: true
+          schema:
+            $ref: '#/definitions/Mock'
+      tags:
+        - Mocks
+      responses:
+        '200':
+          description: A mocknidhi Mock endpoint
+          schema:
+            $ref: '#/definitions/Mock'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Get a Mock endpoint by Id
+      operationId: getMockEndpointById
+      description: |
+       Get a mock endpoint by Id.
+      parameters:
+        - name: mockId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Mock endpoint identifier
+      tags:
+        - Mocks
+      responses:
+        '200':
+          description: A mocknidhi Mock endpoint
+          schema:
+            $ref: '#/definitions/Mock'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete endpoint by Id
+      operationId: deleteMockEndpoint
+      description: |
+       Delete mock endpoint by Id.
+      parameters:
+        - name: mockId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Mock endpoint identifier
+      tags:
+        - Mocks
+      responses:
+        '204':
+          description: Mock endpoint deleted
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Mock:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: integer
+      statusText:
+        type: string
+      httpVersion:
+        type: string
+      headers:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            value:
+              type: string
+          required:
+          - name
+          - value
+      content:
+        type: object
+        properties:
+          size:
+            type: integer
+          mimeType:
+            type: string
+          compression:
+            type: integer
+          text:
+            type: string
+          comment:
+            type: string
+        required:
+        - size
+        - mimeType
+        - compression
+      redirectURL:
+        type: string
+      headersSize:
+        type: integer
+      bodySize:
+        type: integer
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

@@ -1,6 +1,8 @@
 package com.mocknidhi.configuration;
 
 import com.mocknidhi.persistence.config.MongoConfig;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.impl.MapperFacadeImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

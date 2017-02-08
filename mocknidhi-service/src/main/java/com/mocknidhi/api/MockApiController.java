@@ -5,11 +5,19 @@ import com.mocknidhi.protocol.mock.api.MockApi;
 import com.mocknidhi.protocol.mock.model.Mock;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Created by anilkumartalla on 2/5/17.
@@ -17,40 +25,71 @@ import java.util.UUID;
 @RestController
 public class MockApiController implements MockApi {
 
-    @Autowired
-    private MockRepository mockRepository;
+    private final MockRepository mockRepository;
+    private final MapperFacade mapperFacade;
 
     @Autowired
-    private MapperFacade mapper;
-
-    public Mock createMockEndpoint(@RequestBody Mock mock) {
-        return save(mock);
+    public MockApiController(final MockRepository mockRepository, final MapperFacade mapperFacade) {
+        this.mockRepository = mockRepository;
+        this.mapperFacade = mapperFacade;
     }
 
-    public void deleteMockEndpoint(String mockId) {
+    public ResponseEntity<Mock> createMockEndpoint(@RequestBody Mock mock) {
+        return new ResponseEntity<>(save(mock), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<Void> deleteMockEndpoint(@PathVariable("mockId") String mockId) {
         mockRepository.delete(UUID.fromString(mockId));
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public List<Mock> getAllMockEndpoints(Integer offset, Integer limit) {
-        return null;
+    public ResponseEntity<List<Mock>> getAllMockEndpoints(@RequestParam(value = "offset", required = false) Integer offset, @RequestParam(value = "limit", required = false) Integer limit) {
+        int page = 0;
+
+        if (offset > 0 && limit > 0) {
+            page = offset / limit;
+        }
+        Collection<com.mocknidhi.persistence.entity.Mock> entities = mockRepository.findAll(new PageRequest(page, limit)).getContent();
+
+        if (CollectionUtils.isEmpty(entities)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(entities.stream()
+                .map(item -> mapperFacade.map(item, Mock.class))
+                .collect(Collectors
+                        .toList()), HttpStatus.OK);
     }
 
-    public Mock getMockEndpointById(String mockId) {
+    public ResponseEntity<Mock> getMockEndpointById(@PathVariable("mockId") String mockId) {
         com.mocknidhi.persistence.entity.Mock entity = mockRepository.findOne(UUID.fromString(mockId));
 
-        return mapper.map(entity, Mock.class);
+        if (entity == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(mapperFacade.map(entity, Mock.class), HttpStatus.OK);
     }
 
-    public Mock updateMockEndpoint(String mockId, Mock mock) {
+    public ResponseEntity<Mock> updateMockEndpoint(@PathVariable("mockId") String mockId, @RequestBody Mock mock) {
+
+        com.mocknidhi.persistence.entity.Mock entity = mockRepository.findOne(UUID.fromString(mockId));
+
+        if (entity == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         mock.setId(mockId);
 
-        return save(mock);
+        Mock savedMockInstance = save(mock);
+
+        return new ResponseEntity<>(mapperFacade.map(savedMockInstance, Mock.class), HttpStatus.OK);
     }
 
     private Mock save(Mock mock) {
-        com.mocknidhi.persistence.entity.Mock mockEntity = mapper.map(mock, com.mocknidhi.persistence.entity.Mock.class);
-        com.mocknidhi.persistence.entity.Mock savedEntity = mockRepository.insert(mockEntity);
-        return mapper.map(savedEntity, Mock.class);
+        com.mocknidhi.persistence.entity.Mock mockEntity = mapperFacade.map(mock, com.mocknidhi.persistence.entity.Mock.class);
+        com.mocknidhi.persistence.entity.Mock savedEntity = mockRepository.save(mockEntity);
+        return mapperFacade.map(savedEntity, Mock.class);
     }
 }

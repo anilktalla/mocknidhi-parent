@@ -17,6 +17,10 @@ public class Mock implements Serializable {
 
     @Id
     private UUID id;
+    private String description;
+    private String displayName;
+    private String contextPath;
+    private String resourcePath;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
     private Integer status;
@@ -27,5 +31,7 @@ public class Mock implements Serializable {
     private String redirectURL;
     private Integer headersSize;
     private Integer bodySize;
+    private Integer responseDelayInSeconds = 0;
+    private boolean active = true;
 
 }

@@ -148,6 +148,18 @@ definitions:
     properties:
       id:
         type: string
+      description:
+        type: string
+      displayName:
+        type: string
+      contextPath:
+        type: string
+      resourcePath:
+        type: string
+      responseDelayInSeconds:
+        type: integer
+      active:
+        type: boolean
       status:
         type: integer
       statusText:

@@ -44,13 +44,17 @@ public class MockApiController implements MockApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<List<Mock>> getAllMockEndpoints(@RequestParam(value = "offset", required = false) Integer offset, @RequestParam(value = "limit", required = false) Integer limit) {
-        int page = 0;
+    public ResponseEntity<List<Mock>> getAllMockEndpoints(@RequestParam(value = "offset", required = false) Integer offset, @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {
 
-        if (offset > 0 && limit > 0) {
-            page = offset / limit;
+        Collection<com.mocknidhi.persistence.entity.Mock> entities;
+
+        if (offset == null || offset < 0) {
+            //Get All records
+            entities = mockRepository.findAll();
+        } else {
+            //Get by Page
+            entities = mockRepository.findAll(new PageRequest((offset / limit), limit)).getContent();
         }
-        Collection<com.mocknidhi.persistence.entity.Mock> entities = mockRepository.findAll(new PageRequest(page, limit)).getContent();
 
         if (CollectionUtils.isEmpty(entities)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -23,11 +23,12 @@ import com.mocknidhi.MocknidhiSpringBoot;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import  com.oneeyedmen.fakir.Faker;
+import com.oneeyedmen.fakir.Faker;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.regex.Matcher;
 
 /**
  * Created by anilkumartalla on 2/6/17.
@@ -70,28 +71,87 @@ public class MockApiControllerTest {
     @Test
     public void testCreateMockEndpointSuccess() throws Exception {
 
-        mockMvc.perform(post("/api/v1/mock")
-                .content(json(mock()))
-                .contentType(contentType))
-                .andExpect(status().isCreated());
+        //Then
+        createMock();
 
     }
 
     @Test
     public void testUpdateMockEndpointSuccess() throws Exception {
 
-        String response = mockMvc.perform(post("/api/v1/mock")
-                .content(json(mock()))
-                .contentType(contentType))
-                .andExpect(status().isCreated())
-                .andReturn().getResponse().getContentAsString();
+        //Given
+        String response = createMock();
 
-        String id = new Gson().fromJson(response,Mock.class).getId();
-        mockMvc.perform(put("/api/v1/mock/"+id)
+        String id = new Gson().fromJson(response, Mock.class).getId();
+
+        //Then
+        mockMvc.perform(put("/api/v1/mock/" + id)
                 .content(json(mock()))
                 .contentType(contentType))
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    public void testGetMockEndpointSuccess() throws Exception {
+
+        //Given
+        String response = createMock();
+
+        String id = new Gson().fromJson(response, Mock.class).getId();
+
+        //Then
+        mockMvc.perform(get("/api/v1/mock/" + id)
+                .contentType(contentType))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.id").value(id));
+
+    }
+
+    @Test
+    public void testGetAllMockEndpointSuccess() throws Exception {
+
+        //Given
+        String response = createMock();
+
+        String id = new Gson().fromJson(response, Mock.class).getId();
+
+        //Then
+        mockMvc.perform(get("/api/v1/mock")
+                .contentType(contentType))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.[?(@.id)]").exists())
+                .andReturn()
+                .getResponse()
+                .getContentAsString()
+                .contains(id);
+
+    }
+
+    @Test
+    public void testDeleteMockEndpointSuccess() throws Exception {
+
+        //Given
+        String response = createMock();
+
+        String id = new Gson().fromJson(response, Mock.class).getId();
+
+        //Then
+        mockMvc.perform(delete("/api/v1/mock/" + id)
+                .contentType(contentType))
+                .andExpect(status().isNoContent());
+
+    }
+
+    private String createMock() throws Exception {
+
+        return mockMvc.perform(post("/api/v1/mock")
+                .content(json(mock()))
+                .contentType(contentType))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
     }
 
     private String json(Object o) throws IOException {
@@ -101,7 +161,7 @@ public class MockApiControllerTest {
         return mockHttpOutputMessage.getBodyAsString();
     }
 
-    private Mock mock(){
+    private Mock mock() {
         return Faker.fakeA(Mock.class);
     }
 

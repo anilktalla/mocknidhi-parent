@@ -3,6 +3,7 @@ package com.mocknidhi.api;
 import com.mocknidhi.persistence.repository.MockRepository;
 import com.mocknidhi.protocol.mock.api.MockApi;
 import com.mocknidhi.protocol.mock.model.Mock;
+import com.mocknidhi.route.RouteService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,11 +28,13 @@ public class MockApiController implements MockApi {
 
     private final MockRepository mockRepository;
     private final MapperFacade mapperFacade;
+    private RouteService routeService;
 
     @Autowired
-    public MockApiController(final MockRepository mockRepository, final MapperFacade mapperFacade) {
+    public MockApiController(final MockRepository mockRepository, final MapperFacade mapperFacade, final RouteService routeService) {
         this.mockRepository = mockRepository;
         this.mapperFacade = mapperFacade;
+        this.routeService = routeService;
     }
 
     public ResponseEntity<Mock> createMockEndpoint(@RequestBody Mock mock) {
@@ -42,6 +45,14 @@ public class MockApiController implements MockApi {
         mockRepository.delete(UUID.fromString(mockId));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<Void> deploy() {
+        Collection<com.mocknidhi.persistence.entity.Mock> mocks = mockRepository.findAll();
+        routeService.deploy(mocks.stream().collect(Collectors.toList()));
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<List<Mock>> getAllMockEndpoints(@RequestParam(value = "offset", required = false) Integer offset, @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit) {

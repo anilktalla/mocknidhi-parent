@@ -142,6 +142,21 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  /mock/deploy:
+    post:
+      summary: Deploys all mock endpoints
+      operationId: deploy
+      description: |
+        The Mock endpoint deploys all mock endpoints configured to mocknidhi.
+      tags:
+        - Utilities
+      responses:
+        '200':
+          description: Deployment Successful
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
   Mock:
     type: object
@@ -155,6 +170,8 @@ definitions:
       contextPath:
         type: string
       resourcePath:
+        type: string
+      verb:
         type: string
       responseDelayInSeconds:
         type: integer

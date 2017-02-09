@@ -21,6 +21,7 @@ public class Mock implements Serializable {
     private String displayName;
     private String contextPath;
     private String resourcePath;
+    private String verb;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
     private Integer status;

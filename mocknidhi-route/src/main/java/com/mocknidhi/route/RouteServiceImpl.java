@@ -62,7 +62,9 @@ public class RouteServiceImpl implements RouteService {
             @Override
             public void configure() throws Exception {
 
-                restConfiguration().component("netty4-http").host("localhost").port(8085).bindingMode(RestBindingMode.auto);
+                restConfiguration().component("netty4-http").host("localhost").port(8085).bindingMode(RestBindingMode.auto)
+                    .apiContextPath("/api-doc")
+                        .apiProperty("cors", "true");
 
                 Map<String, List<Mock>> mockMap = mapByContext(mockList);
 
@@ -81,20 +83,6 @@ public class RouteServiceImpl implements RouteService {
     private void verbs(final List<Mock> mockList, final RestDefinition restDefinition) {
 
         mockList.stream().forEach(item -> {
-
-            /*RestOperationResponseMsgDefinition oprDef = restDefinition.verb(item.getVerb().toLowerCase(), item.getResourcePath())
-                    .responseMessage()
-                    .message(item.getContent().getText())
-                    .code(item.getStatus());
-
-            item.getHeaders().entrySet().forEach((kv) -> {
-                oprDef.header(kv.getKey())
-                        .name(kv.getKey())
-                        .allowableValues(kv.getValue())
-                        .endHeader();
-            });
-
-            oprDef.endResponseMessage();*/
 
             restDefinition.verb(item.getVerb().toLowerCase(), item.getResourcePath()).route()
                     .process(exchange -> {

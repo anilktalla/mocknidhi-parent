@@ -28,6 +28,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-swagger-java</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.mocknidhi</groupId>
             <artifactId>mocknidhi-persistence</artifactId>
             <version>${project.version}</version>

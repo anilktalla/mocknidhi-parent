@@ -41,7 +41,7 @@ public class MockMapper implements OrikaMapperFactoryConfigurer {
 
             entity.setHeaders(dto.getHeaders().stream()
                     .collect(Collectors
-                            .toMap(x -> x.getName(), x -> x.getValue())));
+                            .toMap(x -> x.getName(), x -> x.getValue(), (k, v) -> k)));
 
         }
 

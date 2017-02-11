@@ -75,7 +75,7 @@
                 <version>0.4.36</version>
                 <configuration>
                     <apiFile>${project.basedir}/src/main/resources/mock-api.yaml</apiFile>
-                    <language>springinterfaces</language>
+                    <language>springinterfacesResponseEntity</language>
                     <apiPackage>com.mocknidhi.protocol.mock.api</apiPackage>
                     <modelPackage>com.mocknidhi.protocol.mock.model</modelPackage>
                 </configuration>

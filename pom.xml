@@ -12,6 +12,7 @@
         <module>mocknidhi-protocol</module>
         <module>mocknidhi-service</module>
         <module>mocknidhi-persistence</module>
+        <module>mocknidhi-route</module>
     </modules>
 
     <properties>
@@ -98,6 +99,60 @@
                 <artifactId>springfox-swagger2</artifactId>
                 <version>2.5.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>21.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.1</version>
+            </dependency>
+
+
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core-java8</artifactId>
+                <version>1.0.0m1</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.oneeyedmen</groupId>
+                <artifactId>fakir</artifactId>
+                <version>1.0.10</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.0</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-core</artifactId>
+                <version>2.18.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-netty4-http</artifactId>
+                <version>2.18.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-swagger-java</artifactId>
+                <version>2.18.0</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>

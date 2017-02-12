@@ -1,6 +1,6 @@
 package com.mocknidhi.route;
 
-import com.mocknidhi.persistence.entity.Mock;
+import com.mocknidhi.persistence.entity.ApiDefinition;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface RouteService {
 
-    void deploy(List<Mock> mockList);
+    void deploy(List<ApiDefinition> apiDefinitions);
 
     void undeploy();
 

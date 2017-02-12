@@ -74,7 +74,7 @@
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
                 <version>0.4.36</version>
                 <configuration>
-                    <apiFile>${project.basedir}/src/main/resources/mock-api.yaml</apiFile>
+                    <apiFile>${project.basedir}/src/main/resources/mocknidhi-api.yaml</apiFile>
                     <language>springinterfacesResponseEntity</language>
                     <apiPackage>com.mocknidhi.protocol.mock.api</apiPackage>
                     <modelPackage>com.mocknidhi.protocol.mock.model</modelPackage>

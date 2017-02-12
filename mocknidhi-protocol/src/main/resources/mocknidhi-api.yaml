@@ -1,0 +1,452 @@
+swagger: '2.0'
+info:
+  title: Mocknidhi Api::Definitions API
+  description: Provides Rest API's to create/update/delete Rest definitions in Mocknidhi.
+  version: 1.0.0
+  contact:
+    name: Anil Kumar Talla
+    url: https://github.com/anilktalla
+    email: anilktalla@gmail.com
+  license:
+    name: Apache-2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+host: mocknidhi.com
+schemes:
+  - https
+  - http
+basePath: /api/v1
+produces:
+  - application/json
+  - application/xml
+consumes:
+  - application/json
+  - application/xml
+paths:
+  /apiDefinition:
+    get:
+      summary: Get All Api Definitions by provided criteria.
+      operationId: getApiDefinitions
+      description: |
+        The endpoint returns all the list of configured Api definitions.
+      parameters:
+        - name: offset
+          in: query
+          type: integer
+          format: int32
+          description: Offset the list of returned results by this amount. Default is zero.
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          description: Number of items to retrieve. Default is 5, maximum is 100.
+      tags:
+        - api-definitions
+      responses:
+        '200':
+          description: An array of Api definition(s).
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ApiDefinition'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a Api Definition
+      operationId: createApiDefinition
+      description: |
+        The endpoint creates a Api definition in mocknidhi.
+      parameters:
+        - name: apiDefinition
+          in: body
+          description: Api definition to add
+          required: true
+          schema:
+            $ref: '#/definitions/ApiDefinition'
+      tags:
+        - api-definitions
+      responses:
+        '201':
+          description: The Api Definition
+          schema:
+            $ref: '#/definitions/ApiDefinition'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /apiDefinition/{apiDefId}:
+    put:
+      summary: Update a Api definition
+      operationId: updateApiDefinition
+      description: |
+        The endpoint updates a Api definition in mocknidhi.
+      parameters:
+        - name: apiDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Api Definition identifier
+        - name: apiDefinition
+          in: body
+          description: Api Definition to update
+          required: true
+          schema:
+            $ref: '#/definitions/ApiDefinition'
+      tags:
+        - api-definitions
+      responses:
+        '200':
+          description: The Api definition
+          schema:
+            $ref: '#/definitions/ApiDefinition'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Get a Api definition
+      operationId: getApiDefinition
+      description: |
+       Get a Api definition by Id.
+      parameters:
+        - name: apiDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Api definition identifier
+      tags:
+        - api-definitions
+      responses:
+        '200':
+          description: The ApiDefinition.
+          schema:
+            $ref: '#/definitions/ApiDefinition'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Api definition by Id
+      operationId: deleteApiDefinition
+      description: |
+       Delete Api definition by Id.
+      parameters:
+        - name: apiDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Api definition identifier
+      tags:
+        - api-definitions
+      responses:
+        '204':
+          description: Api definition deleted
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /apiDefinition/{apiDefId}/operationDefinition:
+    get:
+      summary: Get All Operation definitions
+      operationId: getOperationDefinitions
+      description: |
+        The endpoint returns all the list of configured operation deinitions.
+      parameters:
+        - name: apiDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Api Definition identifier
+        - name: offset
+          in: query
+          type: integer
+          format: int32
+          description: Offset the list of returned results by this amount. Default is zero.
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          description: Number of items to retrieve. Default is 5, maximum is 100.
+      tags:
+        - operation-definitions
+      responses:
+        '200':
+          description: An array of Operation definitions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/OperationDefinition'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+          summary: Create a Operation Definition
+          operationId: createOperationDefinition
+          description: |
+            The endpoint creates a Operation definition for a given Api Definition.
+          parameters:
+            - name: apiDefId
+              in: path
+              type: string
+              required: true
+              format: string
+              description: Api Definition identifier
+            - name: operationDefinition
+              in: body
+              description: Operation definition
+              required: true
+              schema:
+                $ref: '#/definitions/OperationDefinition'
+          tags:
+            - operation-definitions
+          responses:
+            '201':
+              description: The Operation definition
+              schema:
+                $ref: '#/definitions/OperationDefinition'
+            '500':
+              description: Unexpected error
+              schema:
+                $ref: '#/definitions/Error'
+  /apiDefinition/{apiDefId}/operationDefinition/{operationDefId}:
+    put:
+      summary: Update a Operation Definition
+      operationId: updateOperationDefinition
+      description: |
+        The endpoint updates an Operation definition.
+      parameters:
+        - name: apiDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Api Definition identifier
+        - name: operationDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Operation definition identifier
+        - name: operationDefinition
+          in: body
+          description: Operation definition to update
+          required: true
+          schema:
+            $ref: '#/definitions/OperationDefinition'
+      tags:
+        - operation-definitions
+      responses:
+        '200':
+          description: The Operation definition
+          schema:
+            $ref: '#/definitions/OperationDefinition'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Get a Operation definition by Id
+      operationId: getOperationDefinition
+      description: |
+       Get a Operation definition by Id.
+      parameters:
+        - name: apiDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Api Definition identifier
+        - name: operationDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Operation definition identifier
+      tags:
+        - operation-definitions
+      responses:
+        '200':
+          description: The Operation definition
+          schema:
+            $ref: '#/definitions/OperationDefinition'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Operation definition by Id
+      operationId: deleteOperationEndpoint
+      description: |
+       Delete Operation Definition by Id.
+      parameters:
+        - name: apiDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: Api Definition identifier
+        - name: operationDefId
+          in: path
+          type: string
+          required: true
+          format: string
+          description: The Operation definition identifier
+      tags:
+        - operation-definitions
+      responses:
+        '204':
+          description: Operation Definition deleted
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /apiDefinition/deploy:
+    post:
+      summary: Deploys all Api definition endpoints
+      operationId: deploy
+      description: |
+        The endpoint deploys all Api definition endpoints configured to mocknidhi.
+      tags:
+        - utilities
+      responses:
+        '200':
+          description: Deployment Successful
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  ApiDefinition:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      version:
+        type: string
+      description:
+        type: string
+      license:
+        type: string
+      licenseURL:
+        type: string
+      contextPath:
+        type: string
+      baseURI:
+        type: string
+      port:
+        type: integer
+      httpVersion:
+        type: string
+      active:
+        type: boolean
+      responseDelayInSeconds:
+        type: integer
+  OperationDefinition:
+    type: object
+    properties:
+      id:
+        type: string
+      description:
+        type: string
+      displayName:
+        type: string
+      resourcePath:
+        type: string
+      verb:
+        type: string
+      responseDelayInSeconds:
+        type: integer
+      active:
+        type: boolean
+      request:
+        $ref: '#/definitions/OperationDefinitionRequest'
+      response:
+        $ref: '#/definitions/OperationDefinitionResponse'
+  OperationDefinitionRequest:
+    type: object
+    properties:
+      method:
+        type: string
+      queryParams:
+        type: array
+        items:
+          $ref: '#/definitions/RequestParam'
+      postData:
+        $ref: '#/definitions/PostData'
+      headers:
+        type: array
+        items:
+          $ref: '#/definitions/RequestHeader'
+      comment:
+        type: string
+  OperationDefinitionResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      statusText:
+        type: string
+      content:
+        $ref: '#/definitions/ResponseBody'
+      headers:
+        type: array
+        items:
+          $ref: '#/definitions/RequestHeader'
+      comment:
+        type: string
+  PostData:
+    type: object
+    properties:
+      mimeType:
+        type: string
+      text:
+        type: string
+      params:
+        type: array
+        items:
+          $ref: '#/definitions/RequestParam'
+  RequestHeader:
+    type: object
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+      comment:
+        type: string
+  RequestParam:
+    type: object
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+      comment:
+        type: string
+  ResponseBody:
+    type: object
+    properties:
+      mimeType:
+        type: string
+      text:
+        type: string
+      comment:
+        type: string
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

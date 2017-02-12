@@ -37,6 +37,17 @@
             <artifactId>mocknidhi-persistence</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.6.8</version>
+        </dependency>
     </dependencies>
 
 </project>
